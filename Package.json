@@ -1,0 +1,16 @@
+{
+  "name": "com.BearlyGames.DialogueTreeEditor",
+  "version": "1.0.0",
+  "displayName": "Package Example",
+  "description": "This is an example package",
+  "unity": "2022.3",
+  "unityRelease": "0b5",
+  "dependencies": {
+  },
+  "keywords": [
+    "Dialogue"
+  ],
+  "author": {
+    "name": "CGViking"
+  }
+}
