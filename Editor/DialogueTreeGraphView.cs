@@ -33,8 +33,16 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             
             this.nodeCreationRequest = ShowSearchWindow;
             
+            /* Old implementation
             StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Plugins/DialogueTreeNodeEditor/Editor/USS/DialogueTreeEditor.uss");
-            styleSheets.Add(styleSheet);
+            styleSheets.Add(styleSheet); */
+            string[] guids = AssetDatabase.FindAssets("DialogueTreeEditor t:StyleSheet");
+            if (guids.Length > 0)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(path);
+                styleSheets.Add(styleSheet);
+            }
             
             GridBackground background = new GridBackground();
             background.name = "Grid";
