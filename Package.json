@@ -1,17 +1,15 @@
 {
-  "name": "com.bearlygames.dialoguetree-editor",
+  "name": "com.bearlygames.dialogue-tree-editor",
   "version": "1.0.0",
   "displayName": "Dialogue-Tree Node Editor",
   "description": "This is a plugin designed to make Dialogue trees in Unity",
   "unity": "2022.3",
   "unityRelease": "0b5",
-  "dependencies": {
-  },
   "keywords": [
     "Dialogue"
   ],
   "author": {
-    "name": "Bearly Games"
+    "name": "Bearly-Games"
   },
   "samples": [
     {
