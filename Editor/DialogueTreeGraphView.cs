@@ -51,6 +51,16 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new RectangleSelector());
+
+            DrawNodes();
+        }
+
+        private void DrawNodes()
+        {
+            foreach (DialogueGraphNode node in _dialogueTreeAsset.Nodes)
+            {
+                AddNodeToGraph(node);
+            }
         }
 
         private void ShowSearchWindow(NodeCreationContext obj)
@@ -73,7 +83,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             node.typeName = node.GetType().AssemblyQualifiedName;
 
-            DialogueTreeGraphEditorNode editorNode = new DialogueTreeGraphEditorNode();
+            DialogueTreeGraphEditorNode editorNode = new DialogueTreeGraphEditorNode(node);
             editorNode.SetPosition(node.Position);
             GraphNodes.Add(editorNode);
             GraphNodesDictionary.Add(node.id, editorNode);

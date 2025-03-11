@@ -12,8 +12,8 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Attributes
 
         public NodeInfoAttribute(string nodeTitle, string menuItem = "")
         {
-            _nodeTitle = Title;
-            _menuItem = MenuItem;
+            _nodeTitle = nodeTitle;
+            _menuItem = menuItem;
         }
     }
 }

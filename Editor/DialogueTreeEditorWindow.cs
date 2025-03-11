@@ -31,6 +31,14 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         
         public DialogueTreeAsset CurrentGraph => dialogueTreeAsset;
 
+        private void OnEnable()
+        {
+            if (dialogueTreeAsset != null)
+            {
+                DrawGraph();
+            }
+        }
+
         private void Load(DialogueTreeAsset target)
         {
             dialogueTreeAsset = target;
