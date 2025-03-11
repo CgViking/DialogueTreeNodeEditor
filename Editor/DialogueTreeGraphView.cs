@@ -33,7 +33,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             
             this.nodeCreationRequest = ShowSearchWindow;
             
-            string path = "Packages/com.bearlygames.dialoguetree-editor/Editor/USS/DialogueTreeEditor.uss";
+            string path = "Packages/com.bearlygames.dialogue-tree-editor/Editor/USS/DialogueTreeEditor.uss";
             if (!System.IO.File.Exists(path))
             {
                 path = "Assets/Plugins/DialogueTreeNodeEditor/Editor/USS/DialogueTreeEditor.uss"; //Failsafe for the Developer.
@@ -50,7 +50,8 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new RectangleSelector());
+            this.AddManipulator(new FreehandSelector());
+            this.AddManipulator(new ContentZoomer());
 
             DrawNodes();
         }
