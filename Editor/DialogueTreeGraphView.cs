@@ -33,16 +33,14 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             
             this.nodeCreationRequest = ShowSearchWindow;
             
-            /* Old implementation
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Plugins/DialogueTreeNodeEditor/Editor/USS/DialogueTreeEditor.uss");
-            styleSheets.Add(styleSheet); */
-            string[] guids = AssetDatabase.FindAssets("DialogueTreeEditor t:StyleSheet");
-            if (guids.Length > 0)
+            string path = "Packages/com.bearlygames.dialoguetree-editor/Editor/USS/DialogueTreeEditor.uss";
+            if (!System.IO.File.Exists(path))
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(path);
-                styleSheets.Add(styleSheet);
+                path = "Assets/Plugins/DialogueTreeNodeEditor/Editor/USS/DialogueTreeEditor.uss"; //Failsafe for the Developer.
             }
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(path);
+
+            styleSheets.Add(styleSheet);
             
             GridBackground background = new GridBackground();
             background.name = "Grid";
