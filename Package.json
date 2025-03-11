@@ -12,5 +12,17 @@
   ],
   "author": {
     "name": "Bearly Games"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Dialogue Samples",
+      "description": "Contains basic setup for dialogue trees.",
+      "path" : "Samples~/DialogueSamples"
+    },
+    {
+      "displayName": "Dialogue Scene Samples",
+      "description": "Contains scenes that show the full system in action.",
+      "path" : "Samples~/SampleScenes"
+    }
+  ]
 }
