@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DTNE.DialogueTreeNodeEditor.Runtime;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -48,12 +49,35 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             background.SendToBack();
             
             this.AddManipulator(new ContentDragger());
+            this.AddManipulator(new ClickSelector());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new FreehandSelector());
             this.AddManipulator(new ContentZoomer());
 
             DrawNodes();
+
+            graphViewChanged += OnGraphViewChangedEvent;
+        }
+
+        private GraphViewChange OnGraphViewChangedEvent(GraphViewChange graphViewChange)
+        {
+            if (graphViewChange.elementsToRemove != null)
+            {
+                List<DialogueTreeGraphEditorNode> nodes = graphViewChange.elementsToRemove.OfType<DialogueTreeGraphEditorNode>().ToList();
+                for (int i = nodes.Count - 1; i >= 0; i--)
+                {
+                    RemoveNode(nodes[i]);
+                }
+            }
+            
+            return graphViewChange;
+        }
+
+        private void RemoveNode(DialogueTreeGraphEditorNode editorNode)
+        {
+            Undo.RecordObject(_serializedObject.targetObject, "Remove Node");
+            _dialogueTreeAsset.Nodes.Remove(editorNode.Node);
         }
 
         private void DrawNodes()

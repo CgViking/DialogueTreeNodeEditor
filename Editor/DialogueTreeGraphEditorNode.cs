@@ -9,6 +9,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
     public class DialogueTreeGraphEditorNode : Node
     {
         private DialogueGraphNode _node;
+        public DialogueGraphNode   Node => _node;
         public DialogueTreeGraphEditorNode(DialogueGraphNode node)
         {
             this.AddToClassList("dialogue-node");
