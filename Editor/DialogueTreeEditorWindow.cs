@@ -1,3 +1,4 @@
+using System;
 using DTNE.DialogueTreeNodeEditor.Runtime;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -39,6 +40,21 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             }
         }
 
+        private void OnGUI()
+        {
+            if (dialogueTreeAsset != null)
+            {
+                if(EditorUtility.IsDirty(dialogueTreeAsset))
+                {
+                    this.hasUnsavedChanges = true;
+                }
+                else
+                {
+                    this.hasUnsavedChanges = false;
+                }
+            }
+        }
+
         private void Load(DialogueTreeAsset target)
         {
             dialogueTreeAsset = target;
@@ -49,7 +65,15 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             _serializedObject =  new SerializedObject(dialogueTreeAsset);
             _currentView = new DialogueTreeGraphView(_serializedObject, this);
+            _currentView.graphViewChanged += OnChange;
             rootVisualElement.Add(_currentView);
+        }
+
+        private GraphViewChange OnChange(GraphViewChange graphViewChange)
+        {
+            this.hasUnsavedChanges = true;
+            EditorUtility.SetDirty(dialogueTreeAsset);
+            return graphViewChange;
         }
     }
 }

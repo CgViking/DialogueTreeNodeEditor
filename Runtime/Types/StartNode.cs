@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Start", "Process/Start")]
+    [NodeInfo("Start", "Process/Start", false, true)]
     public class StartNode : DialogueGraphNode
     {
     }
@@ -15,7 +15,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
         private string _dialogue;
     }
     
-    [NodeInfo("Actor", "Items/Actor")]
+    [NodeInfo("Actor", "Items/Actor", false, true)]
     public class ActorNode : DialogueGraphNode
     {
         

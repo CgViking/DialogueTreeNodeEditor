@@ -60,14 +60,52 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             graphViewChanged += OnGraphViewChangedEvent;
         }
 
+        //This chooses what can be plugged into what.
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            List<Port> allPorts = new List<Port>();
+            List<Port> ports = new List<Port>();
+
+            foreach (var node in GraphNodes)
+            {
+                allPorts.AddRange(node.Ports);
+            }
+
+            foreach (Port p in allPorts)
+            {
+                if (p == startPort) { continue; }
+                if (p.node == startPort.node) { continue; }
+                if (p.direction == startPort.direction) { continue; }
+                if (p.portType == startPort.portType)
+                {
+                    ports.Add(p);
+                }
+            }
+            
+            return ports;
+        }
+
         private GraphViewChange OnGraphViewChangedEvent(GraphViewChange graphViewChange)
         {
+            if (graphViewChange.movedElements != null)
+            {
+                Undo.RecordObject(_serializedObject.targetObject, "Moved Elements");
+                foreach (DialogueTreeGraphEditorNode editorNode in graphViewChange.movedElements.OfType<DialogueTreeGraphEditorNode>())
+                {
+                    editorNode.SavePosition();
+                }
+            }
             if (graphViewChange.elementsToRemove != null)
             {
+                Undo.RecordObject(_serializedObject.targetObject, "Remove Stuff from Graph");
+                
                 List<DialogueTreeGraphEditorNode> nodes = graphViewChange.elementsToRemove.OfType<DialogueTreeGraphEditorNode>().ToList();
-                for (int i = nodes.Count - 1; i >= 0; i--)
+                if (nodes.Count > 0)
                 {
-                    RemoveNode(nodes[i]);
+                    for (int i = nodes.Count - 1; i >= 0; i--)
+                    {
+                        RemoveNode(nodes[i]);
+                    }
                 }
             }
             
@@ -76,8 +114,10 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
         private void RemoveNode(DialogueTreeGraphEditorNode editorNode)
         {
-            Undo.RecordObject(_serializedObject.targetObject, "Remove Node");
             _dialogueTreeAsset.Nodes.Remove(editorNode.Node);
+            GraphNodesDictionary.Remove(editorNode.Node.id);
+            GraphNodes.Remove(editorNode);
+            _serializedObject.Update();
         }
 
         private void DrawNodes()
