@@ -16,17 +16,17 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
 
         private void ExecuteAsset()
         {
-            _dialogueTreeAssetInstance.Init();
+            _dialogueTreeAssetInstance.Init(this.gameObject);
             
             DialogueGraphNode startNode = _dialogueTreeAssetInstance.GetStartNode();
             ProcessAndMoveToNextNode(startNode);
         }
 
-        private void ProcessAndMoveToNextNode(DialogueGraphNode startNode)
+        private void ProcessAndMoveToNextNode(DialogueGraphNode startNode) //TODO: Make process on player input.
         {
             string nextNodeId = startNode.OnProcess(_dialogueTreeAssetInstance);
 
-            if (string.IsNullOrEmpty(nextNodeId))
+            if (!string.IsNullOrEmpty(nextNodeId))
             {
                 DialogueGraphNode node = _dialogueTreeAssetInstance.GetNode(nextNodeId);
                 ProcessAndMoveToNextNode(node);

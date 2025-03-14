@@ -9,8 +9,9 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
     public class DialogueTreeAsset : ScriptableObject
     {
         [SerializeReference] private List<DialogueGraphNode> _nodes;
-        [SerializeReference] private List<DialogueTreeGraphConnection> _connections; //TODO: Apparently can't reference types.
+        [SerializeField] private List<DialogueTreeGraphConnection> _connections; //TODO: Apparently can't reference types.
         
+        public GameObject gameObject;
         public List<DialogueGraphNode> Nodes => _nodes;
         public List<DialogueTreeGraphConnection> Connections => _connections;
         private Dictionary<string, DialogueGraphNode> _nodeDictionary;
@@ -21,8 +22,9 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             _connections = new List<DialogueTreeGraphConnection>();
         }
 
-        public void Init()
+        public void Init(GameObject gameObject)
         {
+            this.gameObject = gameObject; //TODO: Isn't it opposite?
             _nodeDictionary = new Dictionary<string, DialogueGraphNode>();
             foreach (DialogueGraphNode node in Nodes)
             {
@@ -32,13 +34,22 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
 
         public DialogueGraphNode GetStartNode()
         {
-            StartNode[] startNodes = Nodes.OfType<StartNode>().ToArray();
+             StartNode[] startNodes = _nodes.OfType<StartNode>().ToArray();
             if (startNodes.Length == 0)
             {
                 Debug.LogError("There are no start node in this graph.");
                 return null;
             }
             return startNodes[0];
+            /*
+            var startNode = _nodes.FirstOrDefault(node => node is StartNode);
+            if (startNode == null)
+            {
+                Debug.LogError("There are no start nodes in this graph.");
+                return null;
+            }
+            return (DialogueGraphNode)startNode;
+            */
         }
 
         public DialogueGraphNode GetNode(string nextNodeId)

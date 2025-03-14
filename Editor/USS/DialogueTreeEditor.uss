@@ -8,3 +8,39 @@ DialogueTreeGraphView{
     --grid-background-color: rgb(35, 35, 35);
     --line-color: rgb(32, 32, 32);
 }
+#DialogueNode #title
+{
+    background-color: #3e5a7c;
+}
+#DialogueBranch #title
+{
+    background-color: rgba(175,118,6,0.9);
+}
+#collapsible-area
+{
+    height: 100;
+}
+PropertyField
+{
+    flex-grow: 1;
+    overflow: visible;
+}
+TextField
+{
+    flex-grow: 1;
+    flex-direction: column;
+}
+TextInput
+{
+    overflow: visible;
+}
+TextElement
+{
+    
+    overflow: scroll;
+}
+#extension 
+{
+    flex-grow: 1;
+    height: auto;
+}

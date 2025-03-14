@@ -3,12 +3,15 @@ using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Start", "Process/Start", false, true)]
-    public class StartNode : DialogueGraphNode
+    [NodeInfo("Dialogue", "Dialogue/Dialogue")]
+    public class DialogueNode : DialogueGraphNode
     {
+        [ExposedProperty()]
+        public string Dialogue;
+        
         public override string OnProcess(DialogueTreeAsset currentGraph)
         {
-            Debug.Log("StartNode");
+            Debug.Log(Dialogue);
             return base.OnProcess(currentGraph);
         }
     }
