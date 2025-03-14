@@ -6,18 +6,24 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
     [NodeInfo("Start", "Process/Start", false, true)]
     public class StartNode : DialogueGraphNode
     {
+        public override string OnProcess(DialogueTreeAsset currentGraph)
+        {
+            Debug.Log("StartNode");
+            return base.OnProcess(currentGraph);
+        }
     }
 
     [NodeInfo("Dialogue", "Dialogue/Dialogue")]
     public class DialogueNode : DialogueGraphNode
     {
-        [SerializeField]
-        private string _dialogue;
+        [ExposedProperty()]
+        public string Dialogue;
     }
     
-    [NodeInfo("Actor", "Items/Actor", false, true)]
-    public class ActorNode : DialogueGraphNode
+    [NodeInfo("Dialogue Branch", "Dialogue/Branch", true, true)]
+    public class DialogueBranch : DialogueGraphNode
     {
-        
+        public string Dialogue;
+        public string[] Branches;
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using DTNE.DialogueTreeNodeEditor.Runtime;
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 
 namespace DTNE.DialogueTreeNodeEditor.Editor
 {
@@ -12,12 +14,17 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         private DialogueGraphNode _node;
         private Port _outputPort;
         private List<Port> _ports;
+        private SerializedProperty _serializedProperty;
         public DialogueGraphNode   Node => _node;
         public List<Port> Ports => _ports;
-        public DialogueTreeGraphEditorNode(DialogueGraphNode node)
+        
+        private SerializedObject _serializedObject;
+        
+        public DialogueTreeGraphEditorNode(DialogueGraphNode node, SerializedObject dialogueGraphObject)
         {
             this.AddToClassList("dialogue-node");
 
+            _serializedObject = dialogueGraphObject;
             _node = node;
             
             Type typeInfo = node.GetType();
@@ -34,16 +41,58 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 this.AddToClassList(depth.ToLower().Replace(' ', '-'));
             }
 
+            // We do this so that output is always index 0;
+            if (info.HasFlowOutput)
+            {
+                CreateFlowOutputPort();
+            }
             if (info.HasFlowInput)
             {
                 CreateFlowInputPort();
             }
 
-            if (info.HasFlowOutput)
+            foreach (FieldInfo property in typeInfo.GetFields() )
             {
-                CreateFlowOutputPort();
+                if (property.GetCustomAttribute<ExposedPropertyAttribute>() is ExposedPropertyAttribute exposedProperty)
+                {
+                    PropertyField field = DrawProperty(property.Name);
+                    //field.RegisterValueChangeCallback(OnFieldChangedCallback);
+                }
             }
+            RefreshExpandedState();
+        }
 
+        private PropertyField DrawProperty(string propertyName)
+        {
+            if (_serializedProperty == null)
+            {
+                FetchSerializedProperty();
+            }
+            
+            SerializedProperty prop = _serializedProperty.FindPropertyRelative(propertyName);
+            
+            PropertyField field = new PropertyField(prop);
+            field.bindingPath = prop.propertyPath;
+            extensionContainer.Add(field);
+            return field;
+        }
+
+        private void FetchSerializedProperty()
+        {
+            SerializedProperty nodes = _serializedObject.FindProperty("_nodes");
+            if (nodes.isArray)
+            {
+                int size = nodes.arraySize;
+                for (int i = 0; i < size; i++)
+                {
+                    var element = nodes.GetArrayElementAtIndex(i);
+                    var elementId = element.FindPropertyRelative("guid"); // The same as in DialogueGraphNode.cs
+                    if (elementId.stringValue == _node.id)
+                    {
+                        _serializedProperty = element;
+                    }
+                }
+            }
         }
 
         private void CreateFlowInputPort()
