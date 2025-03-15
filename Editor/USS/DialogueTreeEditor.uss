@@ -25,6 +25,12 @@ DialogueTreeGraphView{
 #IfConditionNode #title {
     background-color: rgba(175,84,165,0.9);
 }
+#EventTriggerNode{
+    width: 360px;
+}
+#EventTriggerNode #title{
+    background-color: #434f27;
+}
 #collapsible-area {
   
 }
