@@ -1,46 +1,64 @@
 DialogueTreeGraphView{
     flex-grow: 1;
 }
-#Grid
-{
+.edge{
+    color: chartreuse;
+    background-color: chartreuse;
+    --edge-color: teal;
+    --selected-edge-color: yellow;
+    --ghost-edge-color: red;
+    --edge-width: 8px;
+}
+
+#Grid {
     --thick-lines: 0;
     --spacing:15;
     --grid-background-color: rgb(35, 35, 35);
     --line-color: rgb(32, 32, 32);
 }
-#DialogueNode #title
-{
+#DialogueNode #title {
     background-color: #3e5a7c;
 }
-#DialogueBranch #title
-{
+#DialogueBranch #title {
     background-color: rgba(175,118,6,0.9);
 }
-#collapsible-area
-{
-    height: 100;
+#IfConditionNode #title {
+    background-color: rgba(175,84,165,0.9);
 }
-PropertyField
-{
+#collapsible-area {
+  
+}
+PropertyField {
     flex-grow: 1;
     overflow: visible;
+}
+TextField .unity-label {
+    -unity-font-style: bold-and-italic;
 }
 TextField
 {
     flex-grow: 1;
     flex-direction: column;
 }
-TextInput
-{
+#unity-text-input {
+    color: black;
+    background-color: beige;
+    -unity-text-align: upper-left;
+    white-space: normal;
+    width: 256px;
+    padding: 6px;
+}
+#unity-text-input .unity-text-element {
+    font-size: 11px;
+}
+TextInput {
     overflow: visible;
 }
-TextElement
-{
+TextElement {
     
     overflow: scroll;
 }
-#extension 
-{
+#extension {
     flex-grow: 1;
     height: auto;
 }

@@ -6,6 +6,7 @@ using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 
 namespace DTNE.DialogueTreeNodeEditor.Editor
 {
@@ -44,7 +45,10 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             // We do this so that output is always index 0;
             if (info.HasFlowOutput)
             {
-                CreateFlowOutputPort();
+                for (int i = 0; i < info.Outputs; i++)
+                {
+                    CreateFlowOutputPort(); //TODO: This actually works, but they have the same index, so they need to iterate the index.
+                }
             }
             if (info.HasFlowInput)
             {
@@ -59,6 +63,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                     //field.RegisterValueChangeCallback(OnFieldChangedCallback);
                 }
             }
+            
             RefreshExpandedState();
         }
 
