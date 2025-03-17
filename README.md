@@ -1,1 +1,1 @@
-Dialogue Tree Node Editor is a plugin for Unity that allows you to easaly make dialogue trees within Unity, in a node based editor window.
+Dialogue Tree Node Editor is a plugin for Unity that allows you to easily make dialogue trees within Unity, in a node based editor window.
