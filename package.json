@@ -11,6 +11,9 @@
   "author": {
     "name": "Bearly-Games"
   },
+  "_upm": {
+    "changelog": "### Changed\n- initial version."
+  },
   "samples": [
     {
       "displayName": "Dialogue Samples",
