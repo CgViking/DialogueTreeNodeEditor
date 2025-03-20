@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
@@ -7,29 +6,50 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
     {
         [SerializeField] private DialogueTreeAsset dialogueTreeAsset;
         private DialogueTreeAsset _dialogueTreeAssetInstance;
+    
+        // Track the current node in the dialogue
+        private DialogueGraphNode _currentNode;
+        // Cache the next node id after processing the current node
+        private string _nextNodeId;
 
         private void OnEnable()
         {
             _dialogueTreeAssetInstance = Instantiate(dialogueTreeAsset);
-            ExecuteAsset();
-        }
-
-        private void ExecuteAsset()
-        {
             _dialogueTreeAssetInstance.Init(this.gameObject);
-            
-            DialogueGraphNode startNode = _dialogueTreeAssetInstance.GetStartNode();
-            ProcessAndMoveToNextNode(startNode);
+        
+            // Get and process the starting node
+            _currentNode = _dialogueTreeAssetInstance.GetStartNode();
+            ProcessCurrentNode();
         }
 
-        private void ProcessAndMoveToNextNode(DialogueGraphNode startNode) //TODO: Make process on player input.
+        // Process the current node (display dialogue, etc.)
+        private void ProcessCurrentNode()
         {
-            string nextNodeId = startNode.OnProcess(_dialogueTreeAssetInstance);
-
-            if (!string.IsNullOrEmpty(nextNodeId))
+            if (_currentNode == null)
             {
-                DialogueGraphNode node = _dialogueTreeAssetInstance.GetNode(nextNodeId);
-                ProcessAndMoveToNextNode(node);
+                Debug.Log("Dialogue ended.");
+                return;
+            }
+        
+            // Process the node and determine the next node id.
+            // This method could update UI elements, display text, etc.
+            _nextNodeId = _currentNode.OnProcess(_dialogueTreeAssetInstance);
+        
+            // Instead of immediately moving to the next node,
+            // we now wait for the user to trigger MoveToNextNode()
+        }
+
+        // Call this method (e.g., via a UI button) to manually move to the next node.
+        public void MoveToNextNode(int choiceIndex)
+        {
+            if (!string.IsNullOrEmpty(_nextNodeId))
+            {
+                _currentNode = _dialogueTreeAssetInstance.GetNode(_nextNodeId);
+                ProcessCurrentNode();
+            }
+            else
+            {
+                Debug.Log("No further nodes. Dialogue ended.");
             }
         }
     }

@@ -1,6 +1,6 @@
 {
   "name": "com.bearlygames.dialogue-tree-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Dialogue-Tree Node Editor",
   "description": "This is a plugin designed to make Dialogue trees in Unity",
   "unity": "2021.3",
@@ -14,7 +14,7 @@
     "name": "Bearly-Games"
   },
   "_upm": {
-    "changelog": "### Changed\n- initial version."
+    "changelog": "### Changed\n- DialogueTreeAssets start with a Start node\n- Start node can't be deleted.\n- "
   },
   "samples": [
     {
