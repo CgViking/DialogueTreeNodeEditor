@@ -42,6 +42,11 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 this.AddToClassList(depth.ToLower().Replace(' ', '-'));
             }
 
+            if (info.Deletable == false) //Make sure nodes like start node is not deletable.
+            {
+                capabilities &= ~Capabilities.Deletable;
+            }
+
             // We do this so that output is always index 0;
             if (info.HasFlowOutput)
             {
@@ -54,7 +59,6 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             {
                 CreateFlowInputPort();
             }
-
             foreach (FieldInfo property in typeInfo.GetFields() )
             {
                 if (property.GetCustomAttribute<ExposedPropertyAttribute>() is ExposedPropertyAttribute exposedProperty)
@@ -102,7 +106,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
         private void CreateFlowInputPort()
         {
-            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PortTypes.FlowPort));
+            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PortTypes.FlowPort));
             inputPort.portName = "In";
             inputPort.tooltip = "Input port";
             _ports.Add(inputPort);

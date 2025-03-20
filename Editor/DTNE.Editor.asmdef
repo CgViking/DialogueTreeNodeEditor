@@ -1,8 +1,12 @@
 {
     "name": "DTNE.Editor",
     "rootNamespace": "DTNE",
-    "references": ["DTNE.Runtime"],
-    "includePlatforms": [],
+    "references": [
+        "DTNE.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
