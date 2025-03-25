@@ -11,8 +11,12 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         [SerializeField]
         private Rect position;
 
-        public string typeName;
+        /// <summary>
+        /// Returns the dialogue of the current node.
+        /// </summary>
+        public static Action<string> DisplayDialogue;
         
+        public string typeName;
         public string id => guid;
         public Rect Position => position;
         public DialogueGraphNode()
