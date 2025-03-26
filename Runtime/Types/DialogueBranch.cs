@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Dialogue Branch", "Dialogue/Branch", true, true, 2)]
+    [NodeInfo("Dialogue Branch (Experimental)", "Dialogue/Branch", true, true, 2)]
     public class DialogueBranch : DialogueGraphNode
     {
         [ExposedProperty]
