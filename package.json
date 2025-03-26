@@ -14,9 +14,8 @@
     "name": "Bearly-Games"
   },
   "_upm": {
-    "changelog": [
-    "### Added\n- Branch node\n- EventTrigger node\n- Event that returns dialogue string\n- `public static Action<string> DisplayDialogue;`\n- `DialogueGraphNode.DisplayDialogue += UpdateText;`\n\n" +
-    "### Changed\n- DialogueTreeAssets start with a Start node\n- Start node can't be deleted.\n- Tagged unfinished nodes as `(Experimental)`"]
+    "changelog":
+    "### Added\n- Branch node\n- EventTrigger node\n- Event that returns dialogue string\n- `public static Action<string> DisplayDialogue;`\n- `DialogueGraphNode.DisplayDialogue += UpdateText;`\n\n### Changed\n- DialogueTreeAssets start with a Start node\n- Start node can't be deleted.\n- Tagged unfinished nodes as `(Experimental)`"
   },
   "samples": [
     {
