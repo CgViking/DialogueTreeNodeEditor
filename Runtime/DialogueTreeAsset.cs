@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DTNE.DialogueTreeNodeEditor.Runtime.Types;
@@ -20,12 +21,19 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         {
             _nodes = new List<DialogueGraphNode>();
             _connections = new List<DialogueTreeGraphConnection>();
+            _nodeDictionary = new Dictionary<string, DialogueGraphNode>();
+            
+            if (!Nodes.OfType<StartNode>().Any())
+            {
+                StartNode startNode = new StartNode();
+                _nodes.Add(startNode);
+                _nodeDictionary.Add(startNode.id, startNode);
+            }
         }
 
         public void Init(GameObject gameObject)
         {
             this.gameObject = gameObject; //TODO: Isn't it opposite?
-            _nodeDictionary = new Dictionary<string, DialogueGraphNode>();
             foreach (DialogueGraphNode node in Nodes)
             {
                 _nodeDictionary.Add(node.id, node);

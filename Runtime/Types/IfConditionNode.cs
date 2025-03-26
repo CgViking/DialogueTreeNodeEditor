@@ -2,7 +2,7 @@ using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
 {
-    [NodeInfo("If", "Conditions/If")]
+    [NodeInfo("If (Experimental)", "Conditions/If")]
     public class IfConditionNode : DialogueGraphNode
     {
         

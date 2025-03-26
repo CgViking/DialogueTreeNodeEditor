@@ -28,7 +28,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
         public static List<SearchContextElement> Elements;
         
-        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
+        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context) //TODO: Hide start node.
         {
             List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
             tree.Add(new SearchTreeGroupEntry(new GUIContent("Nodes"), 0));
