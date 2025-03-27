@@ -31,8 +31,8 @@ DialogueTreeGraphView{
 #EventTriggerNode #title{
     background-color: #434f27;
 }
-#collapsible-area {
-  
+#node-border {
+  background-color: #232323;
 }
 PropertyField {
     flex-grow: 1;
