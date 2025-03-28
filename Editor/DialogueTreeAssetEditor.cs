@@ -1,4 +1,5 @@
 using DTNE.DialogueTreeNodeEditor.Runtime;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;

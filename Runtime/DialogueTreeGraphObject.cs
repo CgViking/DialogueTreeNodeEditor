@@ -1,3 +1,4 @@
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime

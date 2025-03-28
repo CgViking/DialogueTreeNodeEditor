@@ -1,4 +1,5 @@
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Events;
 
