@@ -4,9 +4,9 @@ using System.Linq;
 using DTNE.DialogueTreeNodeEditor.Runtime.Types;
 using UnityEngine;
 
-namespace DTNE.DialogueTreeNodeEditor.Runtime
+namespace DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "DialogueTreeAsset", menuName = "Dialogue Tree", order = 0)]
+    [CreateAssetMenu(fileName = "DialogueTreeAsset", menuName = "Dialogue/Dialogue Tree", order = 0)]
     public class DialogueTreeAsset : ScriptableObject
     {
         [SerializeReference] private List<DialogueGraphNode> _nodes;
