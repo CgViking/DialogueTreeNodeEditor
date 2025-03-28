@@ -48,10 +48,11 @@ TextField
 }
 #unity-text-input {
     color: black;
-    background-color: beige;
+    background-color: whitesmoke;
     -unity-text-align: upper-left;
     white-space: normal;
-    width: 256px;
+    min-width: 128;
+    max-width: 512;
     padding: 6px;
 }
 #unity-text-input .unity-text-element {
@@ -67,4 +68,23 @@ TextElement {
 #extension {
     flex-grow: 1;
     height: auto;
+    flex-direction: row-reverse;
+}
+.actorField{
+    flex-direction: column;
+    align-self: flex-start;
+}
+.actorField Label{
+    -unity-font-style: bold-and-italic;
+}
+.actorIcon
+{
+    height: auto;
+    min-height: 128;
+    min-width: 32;
+    flex-grow: 1; 
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 2px;
+    border-color: whitesmoke;
+}
 }
