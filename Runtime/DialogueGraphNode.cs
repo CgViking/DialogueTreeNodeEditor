@@ -8,9 +8,17 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
     public class DialogueGraphNode 
     {
         [SerializeField]
-        private string guid;
+        private string _guid;
         [SerializeField]
         private Rect position;
+
+        public virtual bool HasFlowInput { get; } = true;
+        public virtual bool HasFlowOutput { get; } =  true;
+        public virtual int FlowInputCount { get; } = 1;
+        public virtual int FlowOutputCount { get; } = 1;
+
+        [SerializeField] private Actor _actor;
+        public Actor Actor => _actor;
 
         /// <summary>
         /// Returns the dialogue of the current node.
@@ -18,7 +26,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         public static Action<string> DisplayDialogue;
         
         public string typeName;
-        public string id => guid;
+        public string id => _guid;
         public Rect Position => position;
         public DialogueGraphNode()
         {
@@ -27,7 +35,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
 
         private void NewGUID()
         {
-            guid = Guid.NewGuid().ToString();
+            _guid = Guid.NewGuid().ToString();
         }
 
         public void SetPosition(Rect newPosition)
@@ -38,13 +46,28 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         // The Flow
         public virtual string OnProcess(DialogueTreeAsset currentGraph)
         {
-            DialogueGraphNode nextNodeInFlow = currentGraph.GetNodeFromOutput(guid, 0);
+            DialogueGraphNode nextNodeInFlow = currentGraph.GetNodeFromOutput(_guid, 0);
             if (nextNodeInFlow != null)
             {
                 return nextNodeInFlow.id;
             }
             
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Returns the number of output ports, if null it returns 0.
+        /// </summary>
+        /// <returns></returns>
+        public virtual int GetOutputPortCount()
+        {
+            return this.FlowOutputCount;
+        }
+
+        public string GetOutputPortName(int i)
+        {
+            string rand = string.Format("Output{0}", i);
+            return rand;
         }
     }
 }

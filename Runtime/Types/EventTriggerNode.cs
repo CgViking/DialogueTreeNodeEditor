@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Event Trigger", "Actions/Event Trigger", true, false)]
+    [NodeInfo("Event Trigger", "Actions/Event Trigger")]
     public class EventTriggerNode : DialogueGraphNode
     {
         [ExposedProperty()]

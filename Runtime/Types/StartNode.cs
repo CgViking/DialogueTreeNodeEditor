@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Start", "Process/Start", false, true, 1, false)]
+    [NodeInfo("Start", "Process/Start", false)]
     public class StartNode : DialogueGraphNode
     {
+        public override bool HasFlowInput => false;
+
         public override string OnProcess(DialogueTreeAsset currentGraph)
         {
             Debug.Log("StartNode");

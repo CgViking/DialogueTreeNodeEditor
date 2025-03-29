@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using DTNE.DialogueTreeNodeEditor.Runtime;
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
-using UnityEditor;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
+using DTNE.DialogueTreeNodeEditor.Runtime.Types;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using UnityEditor;
+using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Editor
 {
@@ -16,13 +20,14 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         private Port _outputPort;
         private List<Port> _ports;
         private SerializedProperty _serializedProperty;
-        public DialogueGraphNode   Node => _node;
+        public DialogueGraphNode Node => _node;
         public List<Port> Ports => _ports;
         
         private SerializedObject _serializedObject;
         
         public DialogueTreeGraphEditorNode(DialogueGraphNode node, SerializedObject dialogueGraphObject)
         {
+            
             this.AddToClassList("dialogue-node");
 
             _serializedObject = dialogueGraphObject;
@@ -47,27 +52,33 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 capabilities &= ~Capabilities.Deletable;
             }
 
-            // We do this so that output is always index 0;
-            if (info.HasFlowOutput)
+            // We do this first so that output is always index 0;
+            if (node.HasFlowOutput)
             {
-                for (int i = 0; i < info.Outputs; i++)
+                for (int i = 0; i < node.FlowOutputCount; i++)
                 {
-                    CreateFlowOutputPort(); //TODO: This actually works, but they have the same index, so they need to iterate the index.
+                    CreateFlowOutputPort(i); //TODO: This actually works, but they have the same index, so they need to iterate the index.
                 }
             }
-            if (info.HasFlowInput)
+            if (node.HasFlowInput)
             {
-                CreateFlowInputPort();
+                for (int i = 0; i < node.FlowInputCount; i++)
+                {
+                    CreateFlowInputPort(i);
+                }
             }
             foreach (FieldInfo property in typeInfo.GetFields() )
             {
-                if (property.GetCustomAttribute<ExposedPropertyAttribute>() is ExposedPropertyAttribute exposedProperty)
+                if (property.GetCustomAttribute<ExposedPropertyAttribute>() is { } exposedProperty)
                 {
                     PropertyField field = DrawProperty(property.Name);
                     //field.RegisterValueChangeCallback(OnFieldChangedCallback);
                 }
             }
             
+            FetchSerializedProperty();
+            
+            GetActor();
             RefreshExpandedState();
         }
 
@@ -88,40 +99,59 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
         private void FetchSerializedProperty()
         {
-            SerializedProperty nodes = _serializedObject.FindProperty("_nodes");
-            if (nodes.isArray)
+            if (_serializedObject == null)
             {
-                int size = nodes.arraySize;
-                for (int i = 0; i < size; i++)
+                Debug.LogError("SerializedObject is null!");
+                return;
+            }
+
+            SerializedProperty nodes = _serializedObject.FindProperty("_nodes");
+            if (nodes == null || !nodes.isArray) return;
+
+            for (int i = 0; i < nodes.arraySize; i++)
+            {
+                var element = nodes.GetArrayElementAtIndex(i);
+                var elementId = element.FindPropertyRelative("_guid");
+                if (elementId != null && elementId.stringValue == _node.id)
                 {
-                    var element = nodes.GetArrayElementAtIndex(i);
-                    var elementId = element.FindPropertyRelative("guid"); // The same as in DialogueGraphNode.cs
-                    if (elementId.stringValue == _node.id)
-                    {
-                        _serializedProperty = element;
-                    }
+                    _serializedProperty = element;
+                    break;
                 }
+            }
+
+            if (_serializedProperty == null)
+            {
+                Debug.LogError($"Failed to find serialized property for node {_node.id}");
             }
         }
 
-        private void CreateFlowInputPort()
+        private void CreateFlowInputPort(int index)
         {
             Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PortTypes.FlowPort));
-            inputPort.portName = "In";
-            inputPort.tooltip = "Input port";
+            inputPort.portName = $"In {index + 1}";
+            inputPort.tooltip = $"Input port {index + 1}";
             _ports.Add(inputPort);
             inputContainer.Add(inputPort);
         }
-        private void CreateFlowOutputPort()
+        private void CreateFlowOutputPort(int index)
         {
-            _outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(PortTypes.FlowPort));
-            _outputPort.portName = "Out";
-            _outputPort.tooltip = "Output port";
-            _ports.Add(_outputPort);
-            outputContainer.Add(_outputPort);
+            var outputPort = InstantiatePort(
+                Orientation.Horizontal,
+                Direction.Output,
+                Port.Capacity.Single,
+                typeof(PortTypes.FlowPort)
+            );
+    
+            outputPort.portName = _node.GetOutputPortName(index);
+            outputPort.tooltip = $"Output port {index}";
+    
+            if (!_ports.Contains(outputPort))
+            {
+                _ports.Add(outputPort);
+                outputContainer.Add(outputPort);
+            }
         }
-
-
+        
         public void SavePosition()
         {
             _node.SetPosition(GetPosition());
