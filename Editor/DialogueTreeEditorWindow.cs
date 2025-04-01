@@ -1,5 +1,6 @@
 using System;
 using DTNE.DialogueTreeNodeEditor.Runtime;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;

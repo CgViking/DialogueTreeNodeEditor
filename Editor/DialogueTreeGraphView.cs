@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DTNE.DialogueTreeNodeEditor.Runtime;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
@@ -185,12 +186,34 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             DialogueTreeGraphEditorNode inputNode = GetNode(connection.inputPort.nodeId);
             DialogueTreeGraphEditorNode outputNode = GetNode(connection.outputPort.nodeId);
-            
-            if (inputNode == null || outputNode == null) { return; }
+
+            if (inputNode == null || outputNode == null)
+            {
+                _dialogueTreeAsset.Connections.Remove(connection);
+                return;
+            }
             
             Port inPort = inputNode.Ports[connection.inputPort.portIndex];
             Port outPort = outputNode.Ports[connection.outputPort.portIndex];
+
+            if (inPort == null || outPort == null)
+            {
+                _dialogueTreeAsset.Connections.Remove(connection);
+                return;
+            }
+
+            // Ensure ports have opposite directions
+            if (inPort.direction == outPort.direction)
+            {
+                Debug.LogError($"Invalid connection: Port directions must differ (Input: {inPort.direction}, Output: {outPort.direction})");
+                _dialogueTreeAsset.Connections.Remove(connection); // Remove invalid connection
+                return;
+            }
+            
             Edge edge = inPort.ConnectTo(outPort);
+            
+            if (edge == null) { return; }
+            
             AddElement(edge);
             
             ConnectionDictionary.Add(edge, connection);
@@ -237,5 +260,6 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             _serializedObject.Update();
             this.Bind(_serializedObject);
         }
+        
     }
 }

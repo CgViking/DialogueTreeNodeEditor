@@ -1,4 +1,5 @@
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
@@ -8,8 +9,8 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
     {
         [ExposedProperty()]
         public string Dialogue;
-        
-        public override string OnProcess(DialogueTreeAsset currentGraph)
+
+        public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             DisplayDialogue?.Invoke(Dialogue);
             return base.OnProcess(currentGraph);

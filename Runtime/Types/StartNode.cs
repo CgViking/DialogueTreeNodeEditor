@@ -1,13 +1,16 @@
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Start", "Process/Start", false, true, 1, false)]
+    [NodeInfo("Start", "Process/Start", false)]
     public class StartNode : DialogueGraphNode
     {
-        public override string OnProcess(DialogueTreeAsset currentGraph)
+        public override bool HasFlowInput => false;
+
+        public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             Debug.Log("StartNode");
             return base.OnProcess(currentGraph);

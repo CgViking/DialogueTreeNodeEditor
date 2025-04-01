@@ -1,16 +1,17 @@
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
+using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
-    [NodeInfo("Event Trigger", "Actions/Event Trigger", true, false)]
+    [NodeInfo("Event Trigger", "Actions/Event Trigger")]
     public class EventTriggerNode : DialogueGraphNode
     {
         [ExposedProperty()]
         public UnityEvent EventTrigger;
 
-        public override string OnProcess(DialogueTreeAsset currentGraph)
+        public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             Debug.Log("EventTrigger");
             EventTrigger!.Invoke();
