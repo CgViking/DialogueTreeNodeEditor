@@ -15,27 +15,17 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
         [ExposedProperty, Tooltip("The start dialogue\nCan be left blank")]
         public string StartDialogue;
         
-        public override int FlowOutputCount => Choices.Count - 1;
+        public override int FlowOutputCount => Choices.Count;
         public override int GetOutputPortCount()
         {
-            return Choices.Count;
+            return FlowOutputCount;
         }
         public override string OnProcess(DialogueTreeAsset currentGraph)
         {
             int selectedChoiceIndex = GetPlayerChoice();
             return currentGraph.GetNodeFromOutput(id, selectedChoiceIndex)?.id;
         }
-        public void NotifyPortsChanged()
-        {
-            EditorApplication.delayCall += () =>
-            {
-                var editorNode = GetEditorNode(this);
-            };
-        }
-        private object GetEditorNode(DialogueBranch dialogueBranch)
-        {
-            throw new System.NotImplementedException();
-        }
+        
         private int GetPlayerChoice()
         {
             throw new System.NotImplementedException();

@@ -17,14 +17,19 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
     public class DialogueTreeGraphEditorNode : Node
     {
         private DialogueGraphNode _node;
-        private Port _outputPort;
-        private List<Port> _ports;
+        
+        private List<Port> _outputPorts = new List<Port>();
+        private List<Port> _inputPorts = new List<Port>();
+        public List<Port> Ports => _inputPorts.Concat(_outputPorts).ToList();
+        
         private SerializedProperty _serializedProperty;
         public DialogueGraphNode Node => _node;
-        public List<Port> Ports => _ports;
         
         private SerializedObject _serializedObject;
-        
+        private SerializedProperty _choicesProp;
+        private int _lastChoiceCount;
+
+
         public DialogueTreeGraphEditorNode(DialogueGraphNode node, SerializedObject dialogueGraphObject)
         {
             
@@ -38,8 +43,6 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
             title = info.Title;
             this.name = typeInfo.Name;
-            
-            _ports = new List<Port>();
 
             string[] depths = info.MenuItem.Split("/");
             foreach (var depth in depths)
@@ -78,8 +81,146 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             
             FetchSerializedProperty();
             
+            SetupBranches();
             GetActor();
             RefreshExpandedState();
+        }
+
+        private void SetupBranches()
+        {
+            if (!(_node is DialogueBranch db)) return;
+
+            db.Choices.Add("New Choice");
+            
+            // Ensure serialized properties are valid
+            if (_serializedProperty == null)
+            {
+                Debug.LogError("SerializedProperty is null!");
+                return;
+            }
+
+            _choicesProp = _serializedProperty.FindPropertyRelative("_choices");
+            if (_choicesProp == null)
+            {
+                Debug.LogError("Could not find _choices property!");
+                return;
+            }
+
+            VisualElement branchView = new VisualElement();
+            branchView.AddToClassList("branchView");
+
+            // 1. Initialize ListView with explicit binding
+            ListView choicesList = new ListView
+            {
+                bindingPath = "_choices",
+                showFoldoutHeader = false,
+                showBoundCollectionSize = false,
+                showBorder = true,
+                showAddRemoveFooter = true,
+                reorderable = false,
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+                fixedItemHeight = 32,
+                style = { flexGrow = 1 }
+            };
+
+            choicesList.BindProperty(_choicesProp);
+      
+            choicesList.makeItem = () => 
+            {
+                var textField = new TextField
+                {
+                    label = "Choice ",
+                    maxLength = 64
+                };
+                textField.AddToClassList("choice-text-field");
+                return textField;
+            };
+
+            choicesList.bindItem = (element, index) =>
+            {
+                var textField = (TextField)element;
+                textField.label = "Choice " + index.ToString();
+                var itemProp = _choicesProp.GetArrayElementAtIndex(index);
+                textField.BindProperty(itemProp); // Direct property binding
+            };
+            
+            choicesList.itemsAdded += indices =>
+            {
+                _serializedObject.Update();
+                _serializedObject.ApplyModifiedProperties();
+                foreach (int index in indices)
+                {
+                    CreateFlowOutputPort(index);
+                }
+            };
+
+            choicesList.itemsRemoved += indices =>
+            {
+                _serializedObject.Update();
+                _serializedObject.ApplyModifiedProperties();
+                foreach (int index in indices.OrderByDescending(i => i))
+                {
+                    RemoveFlowOutput(index);
+                }
+            };
+            
+            branchView.Add(choicesList);
+            extensionContainer.Add(branchView);
+        }
+
+        private void RemoveFlowOutput(int index) {
+            if (index < 0 || index >= _outputPorts.Count) return;
+
+            _outputPorts.RemoveAt(index);
+            outputContainer.RemoveAt(index);
+        }
+
+        private void GetActor()
+        {
+            var actorField = new ObjectField("Actor");
+            actorField.objectType = typeof(Actor);
+
+            // Check if the property exists
+            if (_serializedProperty != null)
+            {
+                SerializedProperty actorProp = _serializedProperty.FindPropertyRelative("_actor");
+                if (actorProp != null)
+                {
+                    actorField.BindProperty(actorProp);
+                }
+                else
+                {
+                    Debug.LogWarning("Actor property not found.");
+                }
+            }
+            else
+            {
+                Debug.LogError("SerializedProperty not initialized.");
+            }
+            
+            actorField.tooltip = "The associated Actor\nIf this is the Start node, then it is whom initiated the conversation.";
+            actorField.AddToClassList("actorField");
+            extensionContainer.Insert(0 ,actorField); //Insert to make sure it's first in the list.
+
+            // Set background color if actor exists
+            if (_node.Actor != null)
+            {
+                if (_node.Actor.name != string.Empty)
+                {
+                    actorField.name = _node.Actor.name;
+                }
+                if (_node.Actor.actorColor != null)
+                {
+                    actorField.style.backgroundColor = new StyleColor(_node.Actor.actorColor);
+                }
+                if (_node.Actor.actorIcon != null)
+                {
+                    var icon = new VisualElement();
+                    icon.AddToClassList("actorIcon");
+                    icon.style.backgroundImage = new StyleBackground(_node.Actor.actorIcon);
+                    actorField.Add(icon);
+                }
+            }
         }
 
         private PropertyField DrawProperty(string propertyName)
@@ -130,7 +271,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PortTypes.FlowPort));
             inputPort.portName = $"In {index + 1}";
             inputPort.tooltip = $"Input port {index + 1}";
-            _ports.Add(inputPort);
+            _inputPorts.Add(inputPort);
             inputContainer.Add(inputPort);
         }
         private void CreateFlowOutputPort(int index)
@@ -144,17 +285,15 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
     
             outputPort.portName = _node.GetOutputPortName(index);
             outputPort.tooltip = $"Output port {index}";
-    
-            if (!_ports.Contains(outputPort))
-            {
-                _ports.Add(outputPort);
-                outputContainer.Add(outputPort);
-            }
+
+            _outputPorts.Add(outputPort);
+            outputContainer.Add(outputPort);
         }
         
         public void SavePosition()
         {
             _node.SetPosition(GetPosition());
         }
+        
     }
 }

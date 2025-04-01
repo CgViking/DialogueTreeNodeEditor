@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
@@ -15,7 +17,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         public virtual bool HasFlowInput { get; } = true;
         public virtual bool HasFlowOutput { get; } =  true;
         public virtual int FlowInputCount { get; } = 1;
-        public virtual int FlowOutputCount { get; } = 1;
+        public virtual int FlowOutputCount { get; set; } = 1;
 
         [SerializeField] private Actor _actor;
         public Actor Actor => _actor;
@@ -64,10 +66,9 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             return this.FlowOutputCount;
         }
 
-        public string GetOutputPortName(int i)
+        public string GetOutputPortName(int index)
         {
-            string rand = string.Format("Output{0}", i);
-            return rand;
+            return "Output " + index;
         }
     }
 }
