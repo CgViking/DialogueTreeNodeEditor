@@ -10,7 +10,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
     {
         public override bool HasFlowInput => false;
 
-        public override string OnProcess(DialogueTreeAsset currentGraph)
+        public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             Debug.Log("StartNode");
             return base.OnProcess(currentGraph);

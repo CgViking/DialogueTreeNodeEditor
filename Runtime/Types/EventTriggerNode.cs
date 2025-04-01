@@ -11,7 +11,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
         [ExposedProperty()]
         public UnityEvent EventTrigger;
 
-        public override string OnProcess(DialogueTreeAsset currentGraph)
+        public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             Debug.Log("EventTrigger");
             EventTrigger!.Invoke();

@@ -1,4 +1,6 @@
+using System;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
+using DTNE.DialogueTreeNodeEditor.Runtime.Types;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
@@ -24,17 +26,22 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         }
 
         // Process the current node (display dialogue, etc.)
-        private void ProcessCurrentNode()
+        private void ProcessCurrentNode(int choice = 0)
         {
             if (_currentNode == null)
             {
                 Debug.Log("Dialogue ended.");
                 return;
             }
+
+            if (_currentNode is DialogueBranch branch)
+            {
+
+            }
         
             // Process the node and determine the next node id.
             // This method could update UI elements, display text, etc.
-            _nextNodeId = _currentNode.OnProcess(_dialogueTreeAssetInstance);
+            _nextNodeId = _currentNode.OnProcess(_dialogueTreeAssetInstance, choice);
         
             // Instead of immediately moving to the next node,
             // we now wait for the user to trigger MoveToNextNode()
@@ -47,7 +54,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             if (!string.IsNullOrEmpty(_nextNodeId))
             {
                 _currentNode = _dialogueTreeAssetInstance.GetNode(_nextNodeId);
-                ProcessCurrentNode();
+                ProcessCurrentNode(choiceIndex);
             }
             else
             {

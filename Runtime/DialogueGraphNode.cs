@@ -46,9 +46,9 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         }
 
         // The Flow
-        public virtual string OnProcess(DialogueTreeAsset currentGraph)
+        public virtual string OnProcess(DialogueTreeAsset currentGraph, int choice = 0)
         {
-            DialogueGraphNode nextNodeInFlow = currentGraph.GetNodeFromOutput(_guid, 0);
+            DialogueGraphNode nextNodeInFlow = currentGraph.GetNodeFromOutput(_guid, choice);
             if (nextNodeInFlow != null)
             {
                 return nextNodeInFlow.id;

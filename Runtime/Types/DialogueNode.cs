@@ -10,7 +10,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
         [ExposedProperty()]
         public string Dialogue;
 
-        public override string OnProcess(DialogueTreeAsset currentGraph)
+        public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             DisplayDialogue?.Invoke(Dialogue);
             return base.OnProcess(currentGraph);
