@@ -89,8 +89,6 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         private void SetupBranches()
         {
             if (!(_node is DialogueBranch db)) return;
-
-            db.Choices.Add("New Choice");
             
             // Ensure serialized properties are valid
             if (_serializedProperty == null)
