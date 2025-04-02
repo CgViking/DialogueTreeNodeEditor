@@ -33,11 +33,6 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
                 Debug.Log("Dialogue ended.");
                 return;
             }
-
-            if (_currentNode is DialogueBranch branch)
-            {
-
-            }
         
             // Process the node and determine the next node id.
             // This method could update UI elements, display text, etc.

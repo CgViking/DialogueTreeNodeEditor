@@ -25,7 +25,11 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         /// <summary>
         /// Returns the dialogue of the current node.
         /// </summary>
-        public static Action<string> DisplayDialogue;
+        public static event EventHandler<DialogueEventArgs> DialogueUpdated; //Static for easy access.
+        protected void RaiseDialogueUpdated(DialogueEventArgs args)
+        {
+            DialogueUpdated?.Invoke(this, args);   
+        }
         
         public string typeName;
         public string id => _guid;
@@ -70,5 +74,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         {
             return "Output " + index;
         }
+
+
     }
 }
