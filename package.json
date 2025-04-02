@@ -15,7 +15,7 @@
   },
   "_upm": {
     "changelog":
-    "- New event for getting the dialogue"
+    "### Added\n- Simple event interface to get current Dialogue and who is speaking it.\n- Actor profile changes on adding\n\n### Fixed\n- Branch no longer adding a choice on each open of asset\n- Can no longer delete list items in branch\n- Undo actually works"
   },
   "samples": [
     {

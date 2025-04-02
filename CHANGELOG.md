@@ -5,6 +5,7 @@
 - Actor profile changes on adding
 
 ### Fixed
+- Branch no longer adding a choice on each open of asset
 - Can no longer delete list items in branch
 - Undo actually works
 
