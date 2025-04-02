@@ -12,8 +12,9 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 
         public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
-            DisplayDialogue?.Invoke(Dialogue);
+            RaiseDialogueUpdated(new DialogueEventArgs(this.Dialogue, this.Actor));
             return base.OnProcess(currentGraph);
         }
+        
     }
 }

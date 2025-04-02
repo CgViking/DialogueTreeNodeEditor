@@ -10,7 +10,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
     [NodeInfo("Dialogue Branch (Experimental)", "Dialogue/Branch")] //TODO: Find a way to add or remove inputs/outputs.
     public class DialogueBranch : DialogueGraphNode
     {
-        [SerializeField] private List<string> _choices = new List<string>();
+        [SerializeField] private List<string> _choices = new List<string>(2);
         public List<string> Choices => _choices;
         [ExposedProperty, Tooltip("The start dialogue\nCan be left blank")]
         public string StartDialogue;
