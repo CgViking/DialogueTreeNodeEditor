@@ -63,8 +63,14 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             DrawConnections();
 
             graphViewChanged += OnGraphViewChangedEvent;
+            Undo.undoRedoPerformed += UndoRedoPerformed;
         }
 
+        private void UndoRedoPerformed()
+        {
+            _serializedObject.Update();
+            Refresh();
+        }
 
 
         //This chooses what can be plugged into what.
@@ -260,6 +266,26 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             _serializedObject.Update();
             this.Bind(_serializedObject);
         }
-        
+
+        private void Refresh()
+        {
+            // Remove all nodes
+            foreach (var node in GraphNodes.ToList())
+            {
+                RemoveElement(node);
+            }
+            GraphNodes.Clear();
+            GraphNodesDictionary.Clear();
+
+            // Remove all edges
+            foreach (var edge in ConnectionDictionary.Keys.ToList())
+            {
+                RemoveElement(edge);
+                ConnectionDictionary.Remove(edge);
+            }
+            ConnectionDictionary.Clear();
+            DrawNodes();
+            DrawConnections();
+        }
     }
 }
