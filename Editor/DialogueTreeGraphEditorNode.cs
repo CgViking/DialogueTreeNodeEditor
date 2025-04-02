@@ -123,8 +123,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             //Remove ability to delete.
             choicesList.RegisterCallback<ContextualMenuPopulateEvent>(evt => 
             {
-                evt.menu.RemoveItemAt(5);
-                evt.menu.RemoveItemAt(5);
+                evt.menu.ClearItems();
             });
 
             choicesList.BindProperty(_choicesProp);
@@ -225,7 +224,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             if (actor.name != string.Empty) {
                 actorField.name = actor.name;
             }
-            actorField.style.backgroundColor = new StyleColor(_node.Actor.actorColor);
+            actorField.style.backgroundColor = new StyleColor(actor.actorColor);
 
             if (icon == null) // Make new icon if null.
             {
