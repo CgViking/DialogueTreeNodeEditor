@@ -123,8 +123,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             //Remove ability to delete.
             choicesList.RegisterCallback<ContextualMenuPopulateEvent>(evt => 
             {
-                evt.menu.RemoveItemAt(5);
-                evt.menu.RemoveItemAt(5);
+                evt.menu.ClearItems();
             });
 
             choicesList.BindProperty(_choicesProp);
