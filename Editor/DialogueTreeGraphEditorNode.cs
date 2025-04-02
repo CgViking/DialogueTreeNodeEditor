@@ -90,7 +90,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             if (!(_node is DialogueBranch db)) return;
             
-            // Ensure serialized properties are valid
+            // Check if serialized properties are valid
             if (_serializedProperty == null)
             {
                 Debug.LogError("SerializedProperty is null!");
@@ -106,8 +106,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
             VisualElement branchView = new VisualElement();
             branchView.AddToClassList("branchView");
-
-            // 1. Initialize ListView with explicit binding
+            
             ListView choicesList = new ListView
             {
                 bindingPath = "_choices",
@@ -120,6 +119,13 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 fixedItemHeight = 32,
                 style = { flexGrow = 1 }
             };
+            
+            //Remove ability to delete.
+            choicesList.RegisterCallback<ContextualMenuPopulateEvent>(evt => 
+            {
+                evt.menu.RemoveItemAt(5);
+                evt.menu.RemoveItemAt(5);
+            });
 
             choicesList.BindProperty(_choicesProp);
       
@@ -150,6 +156,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 {
                     CreateFlowOutputPort(index);
                 }
+                MarkDirtyRepaint();
             };
 
             choicesList.itemsRemoved += indices =>
@@ -160,6 +167,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 {
                     RemoveFlowOutput(index);
                 }
+                MarkDirtyRepaint();
             };
             
             branchView.Add(choicesList);
@@ -177,48 +185,59 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             var actorField = new ObjectField("Actor");
             actorField.objectType = typeof(Actor);
+            actorField.tooltip = "The associated Actor\nIf this is the Start node, then it is whom initiated the conversation.";
+            actorField.AddToClassList("actorField");
+            
+            SerializedProperty actorProp = _serializedProperty?.FindPropertyRelative("_actor");
 
             // Check if the property exists
-            if (_serializedProperty != null)
+            if (actorProp != null)
             {
-                SerializedProperty actorProp = _serializedProperty.FindPropertyRelative("_actor");
-                if (actorProp != null)
+                actorField.BindProperty(actorProp);
+                
+                actorProp.serializedObject.Update();
+                actorField.RegisterValueChangedCallback(evt =>
                 {
-                    actorField.BindProperty(actorProp);
-                }
-                else
-                {
-                    Debug.LogWarning("Actor property not found.");
-                }
+                    _serializedObject.ApplyModifiedProperties();
+                    UpdateActorDisplay(actorField, evt.newValue as  Actor);
+                    RefreshExpandedState();
+                });
+
+                UpdateActorDisplay(actorField, _node.Actor);
             }
             else
             {
-                Debug.LogError("SerializedProperty not initialized.");
+                Debug.LogWarning("Actor property not found!");
             }
             
-            actorField.tooltip = "The associated Actor\nIf this is the Start node, then it is whom initiated the conversation.";
-            actorField.AddToClassList("actorField");
             extensionContainer.Insert(0 ,actorField); //Insert to make sure it's first in the list.
+            RefreshExpandedState();
+        }
 
-            // Set background color if actor exists
-            if (_node.Actor != null)
-            {
-                if (_node.Actor.name != string.Empty)
-                {
-                    actorField.name = _node.Actor.name;
-                }
-                if (_node.Actor.actorColor != null)
-                {
-                    actorField.style.backgroundColor = new StyleColor(_node.Actor.actorColor);
-                }
-                if (_node.Actor.actorIcon != null)
-                {
-                    var icon = new VisualElement();
-                    icon.AddToClassList("actorIcon");
-                    icon.style.backgroundImage = new StyleBackground(_node.Actor.actorIcon);
-                    actorField.Add(icon);
-                }
+        private void UpdateActorDisplay(ObjectField actorField,  Actor actor)
+        {
+            var icon = actorField.Q<VisualElement>("actorIcon");
+            
+            if (icon != null) actorField.Remove(icon);
+            
+            if (actor == null) return;
+            
+            if (actor.name != string.Empty) {
+                actorField.name = actor.name;
             }
+            actorField.style.backgroundColor = new StyleColor(_node.Actor.actorColor);
+
+            if (icon == null) // Make new icon if null.
+            {
+                icon = new VisualElement();
+                icon.name = "actorIcon";
+                icon.AddToClassList("actorIcon");
+                actorField.Add(icon);
+            }
+            
+            icon.style.backgroundImage = actor.actorIcon != null 
+                ? new StyleBackground(actor.actorIcon) 
+                : StyleKeyword.Null;
         }
 
         private PropertyField DrawProperty(string propertyName)
