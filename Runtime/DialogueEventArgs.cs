@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
@@ -8,11 +9,14 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
     {
         public string Dialogue { get; }
         public Actor Actor { get; }
+        public List<string> Choices { get; }
 
-        public DialogueEventArgs(string dialogue, Actor actor)
+        public DialogueEventArgs(string dialogue, Actor actor, List<string> choices = null)
         {
             Dialogue = dialogue;
             Actor = actor;
+            if (choices != null)
+                Choices = choices;
         }
         
     }

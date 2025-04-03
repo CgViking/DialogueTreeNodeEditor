@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using DTNE.DialogueTreeNodeEditor.Runtime;
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
+using DTNE.DialogueTreeNodeEditor.Runtime.Types;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -48,7 +49,10 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                         {
                             NodeInfoAttribute att =(NodeInfoAttribute)attribute;
                             var node = Activator.CreateInstance(type);
+                            
                             if(string.IsNullOrEmpty(att.MenuItem)) {continue;}
+                            if(node is StartNode) { continue; } // Skip Start node, should not be able to add manually.
+                            
                             Elements.Add(new SearchContextElement(node, att.MenuItem));
                         }
                     }

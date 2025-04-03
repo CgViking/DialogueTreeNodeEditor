@@ -20,7 +20,8 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         
         private List<Port> _outputPorts = new List<Port>();
         private List<Port> _inputPorts = new List<Port>();
-        public List<Port> Ports => _inputPorts.Concat(_outputPorts).ToList();
+        public List<Port> OutputPorts => _outputPorts;
+        public List<Port> InputPorts => _inputPorts;
         
         private SerializedProperty _serializedProperty;
         public DialogueGraphNode Node => _node;
@@ -285,8 +286,8 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         private void CreateFlowInputPort(int index)
         {
             Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PortTypes.FlowPort));
-            inputPort.portName = $"In {index + 1}";
-            inputPort.tooltip = $"Input port {index + 1}";
+            inputPort.portName = $"In {index}";
+            inputPort.tooltip = $"Input port {index}";
             _inputPorts.Add(inputPort);
             inputContainer.Add(inputPort);
         }

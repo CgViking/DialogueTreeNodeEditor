@@ -58,13 +58,14 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new FreehandSelector());
             this.AddManipulator(new ContentZoomer());
-
+            
             DrawNodes();
             DrawConnections();
 
             graphViewChanged += OnGraphViewChangedEvent;
             Undo.undoRedoPerformed += UndoRedoPerformed;
         }
+        
 
         private void UndoRedoPerformed()
         {
@@ -81,7 +82,8 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
             foreach (var node in GraphNodes)
             {
-                allPorts.AddRange(node.Ports);
+                allPorts.AddRange(node.OutputPorts);
+                allPorts.AddRange(node.InputPorts); 
             }
 
             foreach (Port p in allPorts)
@@ -142,10 +144,10 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         private void CreateEdge(Edge edge)
         {
             DialogueTreeGraphEditorNode inputNode = (DialogueTreeGraphEditorNode) edge.input.node;
-            int inputIndex = inputNode.Ports.IndexOf(edge.input);
+            int inputIndex = inputNode.InputPorts.IndexOf(edge.input);
             
             DialogueTreeGraphEditorNode outputNode = (DialogueTreeGraphEditorNode) edge.output.node;
-            int outputIndex = outputNode.Ports.IndexOf(edge.output);
+            int outputIndex = outputNode.OutputPorts.IndexOf(edge.output);
             
             DialogueTreeGraphConnection connection = new DialogueTreeGraphConnection(inputNode.Node.id, inputIndex, outputNode.Node.id, outputIndex);
             _dialogueTreeAsset.Connections.Add(connection);
@@ -199,8 +201,8 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 return;
             }
             
-            Port inPort = inputNode.Ports[connection.inputPort.portIndex];
-            Port outPort = outputNode.Ports[connection.outputPort.portIndex];
+            Port inPort = inputNode.InputPorts[connection.inputPort.portIndex];
+            Port outPort = outputNode.OutputPorts[connection.outputPort.portIndex];
 
             if (inPort == null || outPort == null)
             {

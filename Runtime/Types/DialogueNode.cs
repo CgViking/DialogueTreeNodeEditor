@@ -1,6 +1,5 @@
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
-using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {

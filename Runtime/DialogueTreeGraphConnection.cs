@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace DTNE.DialogueTreeNodeEditor.Runtime
 {
     [System.Serializable]
