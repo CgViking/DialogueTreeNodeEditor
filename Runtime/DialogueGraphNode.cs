@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
@@ -64,7 +62,7 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
         /// <summary>
         /// Returns the number of output ports, if null it returns 0.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>number of output ports</returns>
         public virtual int GetOutputPortCount()
         {
             return this.FlowOutputCount;
