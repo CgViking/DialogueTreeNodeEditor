@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9b8b85150e4f179bd2d9d6af8c30a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueTreeAsset: {fileID: 11400000, guid: b354fca7c8cffa8438570a3749c41be7, type: 2}
+  dialogueTreeAsset: {fileID: 11400000, guid: 3b813f21e0305f14ab6421598d4f8029, type: 2}
 --- !u!4 &1061428099
 Transform:
   m_ObjectHideFlags: 0
