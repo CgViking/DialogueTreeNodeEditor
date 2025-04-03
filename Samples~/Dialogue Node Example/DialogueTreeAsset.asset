@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78f6935d57d48d5bb80a1f445214b54, type: 3}
+  m_Name: DialogueTreeAsset
+  m_EditorClassIdentifier: 
+  _nodes:
+  - rid: 5411432372470022148
+  - rid: 5411432372470022149
+  - rid: 5411432372470022150
+  _connections:
+  - inputPort:
+      nodeId: 3c7819c3-cdb2-4efc-aaea-703d75927c8a
+      portIndex: 0
+    outputPort:
+      nodeId: 3b5139c6-9047-442a-98f7-b551cec1902e
+      portIndex: 0
+  - inputPort:
+      nodeId: 1485b79c-3fff-492f-a48c-a5fbc4741233
+      portIndex: 0
+    outputPort:
+      nodeId: 3c7819c3-cdb2-4efc-aaea-703d75927c8a
+      portIndex: 0
+  gameObject: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 5411432372470022148
+      type: {class: StartNode, ns: DTNE.DialogueTreeNodeEditor.Runtime.Types, asm: DTNE.Runtime}
+      data:
+        _guid: 3b5139c6-9047-442a-98f7-b551cec1902e
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        _actor: {fileID: 0}
+        typeName: DTNE.DialogueTreeNodeEditor.Runtime.Types.StartNode, DTNE.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 5411432372470022149
+      type: {class: DialogueNode, ns: DTNE.DialogueTreeNodeEditor.Runtime.Types, asm: DTNE.Runtime}
+      data:
+        _guid: 3c7819c3-cdb2-4efc-aaea-703d75927c8a
+        position:
+          serializedVersion: 2
+          x: 223
+          y: 0
+          width: 264
+          height: 126
+        _actor: {fileID: 0}
+        typeName: DTNE.DialogueTreeNodeEditor.Runtime.Types.DialogueNode, DTNE.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        Dialogue: 
+    - rid: 5411432372470022150
+      type: {class: DialogueNode, ns: DTNE.DialogueTreeNodeEditor.Runtime.Types, asm: DTNE.Runtime}
+      data:
+        _guid: 1485b79c-3fff-492f-a48c-a5fbc4741233
+        position:
+          serializedVersion: 2
+          x: 543
+          y: 0
+          width: 264
+          height: 126
+        _actor: {fileID: 0}
+        typeName: DTNE.DialogueTreeNodeEditor.Runtime.Types.DialogueNode, DTNE.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        Dialogue: 

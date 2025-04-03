@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-color: rgb(26, 26, 26);">
+        <ui:Label text="Label" name="textBox" style="font-size: 48px; -unity-font-style: bold; flex-grow: 1; -unity-text-align: middle-center; color: rgb(229, 229, 229);" />
+        <ui:Button text="Display dialogue." name="continueButton" />
+        <ui:VisualElement name="choicesContainer" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>
