@@ -1,6 +1,4 @@
-using System;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
-using DTNE.DialogueTreeNodeEditor.Runtime.Types;
 using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime
@@ -40,19 +38,23 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             // Instead of immediately moving to the next node,
             // we now wait for the user to trigger MoveToNextNode()
         }
-
-        // Call this method (e.g., via a UI button) to manually move to the next node.
-        public void MoveToNextNode(int choiceIndex)
+        
+        /// <summary>Call this method (e.g. via a UI button) to manually move to the next node.</summary>
+        /// <param name="choiceIndex">Choice pick which output to continue from. Starts at index 0.
+        /// A choice of (-1) would mean an early exit/end conversation.</param>
+        public bool MoveToNextNode(int choiceIndex)
         {
             //TODO: Make choices.
             if (!string.IsNullOrEmpty(_nextNodeId))
             {
                 _currentNode = _dialogueTreeAssetInstance.GetNode(_nextNodeId);
                 ProcessCurrentNode(choiceIndex);
+                return false;
             }
             else
             {
                 Debug.Log("No further nodes. Dialogue ended.");
+                return true;
             }
         }
     }
