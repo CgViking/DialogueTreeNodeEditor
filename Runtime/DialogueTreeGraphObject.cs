@@ -37,7 +37,6 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             // Process the node and determine the next node id.
             // This method could update UI elements, display text, etc.
             _nextNodeId = _currentNode.OnProcess(_dialogueTreeAssetInstance, choice);
-        
             // Instead of immediately moving to the next node,
             // we now wait for the user to trigger MoveToNextNode()
         }

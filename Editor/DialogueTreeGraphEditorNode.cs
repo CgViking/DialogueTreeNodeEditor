@@ -20,7 +20,7 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         
         private List<Port> _outputPorts = new List<Port>();
         private List<Port> _inputPorts = new List<Port>();
-        public List<Port> Ports => _inputPorts.Concat(_outputPorts).ToList();
+        public List<Port> Ports => _outputPorts.Concat(_inputPorts).ToList(); //BUG: THis doesn't work. Need to use separate lists.
         
         private SerializedProperty _serializedProperty;
         public DialogueGraphNode Node => _node;

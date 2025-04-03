@@ -62,18 +62,14 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects
 
         public DialogueGraphNode GetNode(string nextNodeId)
         {
-            if (_nodeDictionary.TryGetValue(nextNodeId, out DialogueGraphNode node))
-            {
-                return node;
-            }
-            return null;
+            return _nodeDictionary.GetValueOrDefault(nextNodeId);
         }
 
         public DialogueGraphNode GetNodeFromOutput(string outputNodeId, int index) //TODO: Add functionality for multi-connections.
         {
             foreach (DialogueTreeGraphConnection connection in _connections)
             {
-                if (connection.outputPort.nodeId == outputNodeId && connection.outputPort.portIndex == index)
+                if (connection.outputPort.nodeId == outputNodeId && connection.outputPort.portIndex == index) //BUG: This is what is causing it. Index is wrong.
                 {
                     string nodeId = connection.inputPort.nodeId;
                     DialogueGraphNode inputNode = _nodeDictionary[nodeId];
