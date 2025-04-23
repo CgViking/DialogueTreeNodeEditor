@@ -1,6 +1,6 @@
 {
   "name": "com.bearlygames.dialogue-tree-editor",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "displayName": "Dialogue-Tree Node Editor",
   "description": "This is a plugin designed to make Dialogue trees in Unity",
   "unity": "2022.3",
@@ -15,7 +15,7 @@
   },
   "_upm": {
     "changelog":
-    "### Added\n- Simple event interface to get current Dialogue and who is speaking it.\n- Actor profile changes on adding\n\n### Fixed\n- Branch no longer adding a choice on each open of asset\n- Can no longer delete list items in branch\n- Undo actually works"
+    "### Added Event Functionality"
   },
   "samples": [
     {
