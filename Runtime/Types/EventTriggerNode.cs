@@ -1,3 +1,4 @@
+using System;
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEngine;
@@ -8,13 +9,23 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
     [NodeInfo("Event Trigger", "Actions/Event Trigger")]
     public class EventTriggerNode : DialogueGraphNode
     {
-        [ExposedProperty()]
-        public UnityEvent EventTrigger;
+        [ExposedProperty, SerializeField]
+        public string EventTriggerName;
 
         public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
             Debug.Log("EventTrigger");
-            EventTrigger!.Invoke();
+
+            var graphObject = currentGraph.gameObject?.GetComponent<DialogueTreeGraphObject>();
+            if (graphObject != null)
+            {
+                graphObject.TriggerEvent(EventTriggerName);
+            }
+            else
+            {
+                Debug.LogError("Failed to find DialogueTreeGraphObject.");
+            }
+            
             return base.OnProcess(currentGraph);
         }
     }

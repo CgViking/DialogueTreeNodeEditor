@@ -1,3 +1,4 @@
+using System;
 using DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
     {
         [SerializeField] private DialogueTreeAsset dialogueTreeAsset;
         private DialogueTreeAsset _dialogueTreeAssetInstance;
+        
+        public event Action<string> OnEventTriggered; 
     
         // Track the current node in the dialogue
         private DialogueGraphNode _currentNode;
@@ -15,12 +18,31 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
 
         private void OnEnable()
         {
-            _dialogueTreeAssetInstance = Instantiate(dialogueTreeAsset);
-            _dialogueTreeAssetInstance.Init(this.gameObject);
+            if (dialogueTreeAsset == null)
+            {
+                _dialogueTreeAssetInstance = Instantiate(dialogueTreeAsset);
+                _dialogueTreeAssetInstance.Init(this.gameObject);
+            }
         
             // Get and process the starting node
             _currentNode = _dialogueTreeAssetInstance.GetStartNode();
             ProcessCurrentNode();
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(_dialogueTreeAssetInstance);
+        }
+        
+        /// <summary>
+        /// Used by EventTriggerNode to trigger events.
+        /// </summary>
+        /// <param name="eventName"></param>
+        public void TriggerEvent(string eventName)
+        {
+            if (string.IsNullOrEmpty(eventName)) return;
+            Debug.Log($"Triggering event: {eventName}");
+            OnEventTriggered?.Invoke(eventName);
         }
 
         // Process the current node (display dialogue, etc.)
@@ -56,6 +78,22 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
                 Debug.Log("No further nodes. Dialogue ended.");
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Function to start a new dialogue.
+        /// </summary>
+        /// <param name="newDialogue"></param>
+        public void NewDialogue(DialogueTreeAsset newDialogue)
+        {
+            if (dialogueTreeAsset != null)
+                Destroy(_dialogueTreeAssetInstance); //Destroy the old instance.
+            
+            this.dialogueTreeAsset = newDialogue;
+            _dialogueTreeAssetInstance = Instantiate(dialogueTreeAsset);
+            _dialogueTreeAssetInstance.Init(this.gameObject);
+            _currentNode = _dialogueTreeAssetInstance.GetStartNode();
+            ProcessCurrentNode();
         }
     }
 }
