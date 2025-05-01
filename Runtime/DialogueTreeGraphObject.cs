@@ -18,15 +18,22 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
 
         private void OnEnable()
         {
-            if (dialogueTreeAsset == null)
+            if (dialogueTreeAsset != null)
             {
                 _dialogueTreeAssetInstance = Instantiate(dialogueTreeAsset);
                 _dialogueTreeAssetInstance.Init(this.gameObject);
+
+                if (_dialogueTreeAssetInstance != null) return;
+                
+                // Get and process the starting node
+                _currentNode = _dialogueTreeAssetInstance.GetStartNode();
+                ProcessCurrentNode();
+            }
+            else
+            {
+                Debug.LogWarning("DialogueTreeAsset is null");
             }
         
-            // Get and process the starting node
-            _currentNode = _dialogueTreeAssetInstance.GetStartNode();
-            ProcessCurrentNode();
         }
 
         private void OnDestroy()
