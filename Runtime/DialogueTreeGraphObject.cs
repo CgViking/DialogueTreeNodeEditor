@@ -22,8 +22,12 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             {
                 _dialogueTreeAssetInstance = Instantiate(dialogueTreeAsset);
                 _dialogueTreeAssetInstance.Init(this.gameObject);
-
-                if (_dialogueTreeAssetInstance != null) return;
+                
+                if (_dialogueTreeAssetInstance == null) 
+                {
+                    Debug.LogError("Failed to instantiate Dialogue Tree Asset.");
+                    return; // Exit if instantiation failed
+                }
                 
                 // Get and process the starting node
                 _currentNode = _dialogueTreeAssetInstance.GetStartNode();
