@@ -14,8 +14,6 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 
         public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
-            Debug.Log("EventTrigger");
-
             var graphObject = currentGraph.gameObject?.GetComponent<DialogueTreeGraphObject>();
             if (graphObject != null)
             {

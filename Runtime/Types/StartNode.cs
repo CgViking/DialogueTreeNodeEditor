@@ -11,7 +11,6 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 
         public override string OnProcess(DialogueTreeAsset currentGraph, int choice)
         {
-            Debug.Log("StartNode");
             RaiseDialogueUpdated(new DialogueEventArgs(string.Empty, this.Actor));
             return base.OnProcess(currentGraph);
         }
