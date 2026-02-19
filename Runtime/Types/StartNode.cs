@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
+    [System.Serializable]
     [NodeInfo("Start", "Process/Start", false)]
     public class StartNode : DialogueGraphNode
     {

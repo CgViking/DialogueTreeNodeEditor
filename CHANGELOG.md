@@ -1,4 +1,12 @@
 # Changelog
+## [0.1.8]
+### Fixed 
+- Fixed missing Serializable attributes on nodes.
+
+## [0.1.4 -> 0.1.7]
+- Changelog missing.
+- fixes
+
 ## [0.1.3]
 ### Added
 - Simple event interface to get current Dialogue and who is speaking it.
