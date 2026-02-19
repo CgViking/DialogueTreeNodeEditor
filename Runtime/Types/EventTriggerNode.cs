@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 namespace DTNE.DialogueTreeNodeEditor.Runtime.Types
 {
+    [System.Serializable]
     [NodeInfo("Event Trigger", "Actions/Event Trigger")]
     public class EventTriggerNode : DialogueGraphNode
     {
