@@ -1,27 +1,32 @@
 {
   "name": "com.bearlygames.dialogue-tree-editor",
   "version": "0.1.8",
-  "displayName": "Dialogue-Tree Node Editor",
   "description": "This is a plugin designed to make Dialogue trees in Unity",
-  "unity": "2022.3",
-  "unityRelease": "0b5",
   "keywords": [
     "Dialogue",
     "Node",
     "Nodes"
   ],
-  "author": {
-    "name": "Bearly-Games"
+  "homepage": "https://github.com/CgViking/DialogueTreeNodeEditor#readme",
+  "bugs": {
+    "url": "https://github.com/CgViking/DialogueTreeNodeEditor/issues"
   },
-  "_upm": {
-    "changelog":
-    "- Fixed missing Serializable attributes on nodes."
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CgViking/DialogueTreeNodeEditor.git"
   },
+  "license": "ISC",
+  "author": "Bearly-Games",
+  "type": "commonjs",
+  "main": "index.js",
+  "displayName": "Dialogue-Tree Node Editor",
+  "unity": "2022.3",
+  "unityRelease": "0b5",
   "samples": [
     {
       "displayName": "Dialogue Samples",
       "description": "Contains basic setup for dialogue trees.",
-      "path" : "Samples~/Dialogue Node Example"
+      "path": "Samples~/Dialogue Node Example"
     }
   ]
 }
