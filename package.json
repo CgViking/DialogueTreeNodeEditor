@@ -1,5 +1,5 @@
 {
-  "name": "com.bearlygames.dialogue-tree-editor",
+  "name": "@CgViking/com.bearlygames.dialogue-tree-editor",
   "version": "0.1.8",
   "description": "This is a plugin designed to make Dialogue trees in Unity",
   "keywords": [
