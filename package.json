@@ -28,5 +28,11 @@
       "description": "Contains basic setup for dialogue trees.",
       "path": "Samples~/Dialogue Node Example"
     }
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
