@@ -1,4 +1,14 @@
 # Changelog
+## [0.2.0]
+### Changed
+- Dropped npm packaging. The plugin is now distributed exclusively as a Unity Package Manager package via git URL.
+- Renamed package from `@CgViking/com.bearlygames.dialogue-tree-editor` to `com.bearlygames.dialogue-tree-editor` to match UPM naming conventions.
+
+### Removed
+- `index.js`, `package-lock.json`, and the `release-package.yml` GitHub Action that published to GitHub's npm registry.
+- npm-only fields (`type`, `main`, `publishConfig`, `scripts`) from `package.json`.
+- Node-template noise from `.gitignore`.
+
 ## [0.1.9]
 ### Fixed
 - Actor portrait now persists when reopening a dialogue asset (was being orphaned on rebind).
