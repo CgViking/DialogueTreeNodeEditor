@@ -1,4 +1,21 @@
 # Changelog
+## [0.1.9]
+### Fixed
+- Actor portrait now persists when reopening a dialogue asset (was being orphaned on rebind).
+- Search menu no longer reuses one shared C# instance per node type — picking the same node twice now creates two distinct nodes.
+- `DrawConnections` no longer throws when a stale connection is pruned mid-iteration.
+- Stale port indices on connections are bounds-checked instead of throwing `IndexOutOfRangeException`.
+- `DialogueTreeAsset.Init` rebuilds the node dictionary so the constructor's ghost `StartNode` is dropped.
+
+### Changed
+- Search provider caches assembly/type scan and invalidates on assembly reload.
+- Search provider tolerates `ReflectionTypeLoadException` from misbehaving assemblies.
+- `IfConditionNode` hidden from the create menu until it has a backing variable system.
+
+### Docs
+- Rewrote README with installation, quick start, node reference, and custom-node example.
+- Expanded Tutorial with end-to-end walkthrough including UI hookup and event handling.
+
 ## [0.1.8]
 ### Fixed 
 - Fixed missing Serializable attributes on nodes.
