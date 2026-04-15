@@ -1,4 +1,8 @@
 # Changelog
+## [0.2.1]
+### Fixed
+- Dialogue no longer requires an extra button press to end when the last node in the tree is an Event Trigger. `ProcessCurrentNode` now returns the end-of-dialogue result and `MoveToNextNode` propagates it through the auto-advance.
+
 ## [0.2.0]
 ### Changed
 - Dropped npm packaging. The plugin is now distributed exclusively as a Unity Package Manager package via git URL.
