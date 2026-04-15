@@ -56,40 +56,36 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             OnEventTriggered?.Invoke(eventName);
         }
 
-        // Process the current node (display dialogue, etc.)
-        private void ProcessCurrentNode(int choice = 0)
+        // Process the current node (display dialogue, etc.). Returns true if the dialogue ended.
+        private bool ProcessCurrentNode(int choice = 0)
         {
             if (_currentNode == null)
             {
                 Debug.Log("Dialogue ended.");
-                return;
+                return true;
             }
-        
-            // Process the node and determine the next node id.
-            // This method could update UI elements, display text, etc.
+
             _nextNodeId = _currentNode.OnProcess(_dialogueTreeAssetInstance, choice);
-            // Instead of immediately moving to the next node,
-            // we now wait for the user to trigger MoveToNextNode()
-            
-            // Event nodes have no UI/text — auto-advance past them so the player
-            // doesn't see an invisible "press to continue" beat.
+
+            // Event nodes have no UI/text — auto-advance so the player doesn't see
+            // an invisible "press to continue" beat. Propagate the end-of-dialogue
+            // result so the caller doesn't need an extra press to clean up.
             if (_currentNode is Types.EventTriggerNode)
             {
-                MoveToNextNode(0);
+                return MoveToNextNode(0);
             }
+            return false;
         }
-        
+
         /// <summary>Call this method (e.g. via a UI button) to manually move to the next node.</summary>
         /// <param name="choiceIndex">Choice pick which output to continue from. Starts at index 0.
         /// A choice of (-1) would mean an early exit/end conversation.</param>
         public bool MoveToNextNode(int choiceIndex)
         {
-            //TODO: Make choices.
             if (!string.IsNullOrEmpty(_nextNodeId))
             {
                 _currentNode = _dialogueTreeAssetInstance.GetNode(_nextNodeId);
-                ProcessCurrentNode(choiceIndex);
-                return false;
+                return ProcessCurrentNode(choiceIndex);
             }
             else
             {
