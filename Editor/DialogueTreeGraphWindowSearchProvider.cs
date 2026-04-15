@@ -5,6 +5,7 @@ using System.Reflection;
 using DTNE.DialogueTreeNodeEditor.Runtime;
 using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
 using DTNE.DialogueTreeNodeEditor.Runtime.Types;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,12 +14,12 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 {
     public struct SearchContextElement
     {
-        public object Target { get; private set; }
+        public Type NodeType { get; private set; }
         public string Title { get; private set; }
 
-        public SearchContextElement(object target, string title)
+        public SearchContextElement(Type nodeType, string title)
         {
-            this.Target = target;
+            this.NodeType = nodeType;
             this.Title = title;
         }
     }
@@ -27,39 +28,39 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         public DialogueTreeGraphView Graph;
         public VisualElement Target;
 
-        public static List<SearchContextElement> Elements;
-        
-        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context) //TODO: Hide start node.
+        private static List<SearchContextElement> _cachedElements;
+
+        [InitializeOnLoadMethod]
+        private static void RegisterReloadHook()
         {
-            List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
-            tree.Add(new SearchTreeGroupEntry(new GUIContent("Nodes"), 0));
-            
-            Elements = new List<SearchContextElement>();
-            
+            AssemblyReloadEvents.afterAssemblyReload += () => _cachedElements = null;
+        }
+
+        private static List<SearchContextElement> GetElements()
+        {
+            if (_cachedElements != null) return _cachedElements;
+
+            var elements = new List<SearchContextElement>();
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             foreach (Assembly assembly in assemblies)
             {
-                foreach (Type type in assembly.GetTypes())
+                Type[] types;
+                try { types = assembly.GetTypes(); }
+                catch (ReflectionTypeLoadException ex) { types = ex.Types.Where(t => t != null).ToArray(); }
+
+                foreach (Type type in types)
                 {
-                    if (type.CustomAttributes.ToList() != null)
-                    {
-                        var attribute = type.GetCustomAttribute(typeof(NodeInfoAttribute));
-                        if (attribute != null)
-                        {
-                            NodeInfoAttribute att =(NodeInfoAttribute)attribute;
-                            var node = Activator.CreateInstance(type);
-                            
-                            if(string.IsNullOrEmpty(att.MenuItem)) {continue;}
-                            if(node is StartNode) { continue; } // Skip Start node, should not be able to add manually.
-                            
-                            Elements.Add(new SearchContextElement(node, att.MenuItem));
-                        }
-                    }
+                    var att = type.GetCustomAttribute<NodeInfoAttribute>();
+                    if (att == null) continue;
+                    if (string.IsNullOrEmpty(att.MenuItem)) continue;
+                    if (type == typeof(StartNode)) continue; // Start node is not user-creatable.
+
+                    elements.Add(new SearchContextElement(type, att.MenuItem));
                 }
             }
-            //Sort by name
-            Elements.Sort((entry1, entry2) =>
+
+            elements.Sort((entry1, entry2) =>
             {
                 string[] splits1 = entry1.Title.Split('/');
                 string[] splits2 = entry2.Title.Split('/');
@@ -82,10 +83,20 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
                 return 0;
             });
-            
+
+            _cachedElements = elements;
+            return _cachedElements;
+        }
+
+        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
+        {
+            List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
+            tree.Add(new SearchTreeGroupEntry(new GUIContent("Nodes"), 0));
+
+            List<SearchContextElement> elements = GetElements();
             List<string> groups = new List<string>();
 
-            foreach (SearchContextElement element in Elements)
+            foreach (SearchContextElement element in elements)
             {
                 string[] enteryTitle = element.Title.Split('/');
                 string groupName = "";
@@ -101,10 +112,10 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
 
                     groupName += "/";
                 }
-                
+
                 SearchTreeEntry entry = new SearchTreeEntry(new GUIContent(enteryTitle.Last()));
                 entry.level = enteryTitle.Length;
-                entry.userData = new  SearchContextElement(element.Target, element.Title);
+                entry.userData = element;
                 tree.Add(entry);
             }
             return tree;
@@ -114,12 +125,12 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             var windowMousePosition = Graph.ChangeCoordinatesTo(Graph,  context.screenMousePosition - Graph.Window.position.position);
             var graphMousePosition = Graph.contentViewContainer.WorldToLocal(windowMousePosition);
-             
-             SearchContextElement element = (SearchContextElement)searchTreeEntry.userData; 
-             DialogueGraphNode node = (DialogueGraphNode)element.Target;
-             node.SetPosition(new Rect(graphMousePosition, new Vector2()));
-             Graph.Add(node);
-             return true;
+
+            SearchContextElement element = (SearchContextElement)searchTreeEntry.userData;
+            DialogueGraphNode node = (DialogueGraphNode)Activator.CreateInstance(element.NodeType);
+            node.SetPosition(new Rect(graphMousePosition, new Vector2()));
+            Graph.Add(node);
+            return true;
         }
     }
 }

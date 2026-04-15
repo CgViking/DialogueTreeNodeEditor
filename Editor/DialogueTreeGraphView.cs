@@ -183,11 +183,11 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         {
             if(_dialogueTreeAsset.Connections == null) { return; }
 
-            foreach (DialogueTreeGraphConnection connection in _dialogueTreeAsset.Connections)
+            // Snapshot — DrawConnection may prune stale entries from the list.
+            foreach (DialogueTreeGraphConnection connection in _dialogueTreeAsset.Connections.ToList())
             {
                 DrawConnection(connection);
             }
-            
         }
 
         private void DrawConnection(DialogueTreeGraphConnection connection)
@@ -200,7 +200,14 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
                 _dialogueTreeAsset.Connections.Remove(connection);
                 return;
             }
-            
+
+            if (connection.inputPort.portIndex < 0 || connection.inputPort.portIndex >= inputNode.InputPorts.Count ||
+                connection.outputPort.portIndex < 0 || connection.outputPort.portIndex >= outputNode.OutputPorts.Count)
+            {
+                _dialogueTreeAsset.Connections.Remove(connection);
+                return;
+            }
+
             Port inPort = inputNode.InputPorts[connection.inputPort.portIndex];
             Port outPort = outputNode.OutputPorts[connection.outputPort.portIndex];
 

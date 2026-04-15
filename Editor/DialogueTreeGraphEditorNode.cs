@@ -217,26 +217,27 @@ namespace DTNE.DialogueTreeNodeEditor.Editor
         private void UpdateActorDisplay(ObjectField actorField,  Actor actor)
         {
             var icon = actorField.Q<VisualElement>("actorIcon");
-            
-            if (icon != null) actorField.Remove(icon);
-            
-            if (actor == null) return;
-            
-            if (actor.name != string.Empty) {
+
+            if (actor == null)
+            {
+                if (icon != null) actorField.Remove(icon);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(actor.name)) {
                 actorField.name = actor.name;
             }
             actorField.style.backgroundColor = new StyleColor(actor.actorColor);
 
-            if (icon == null) // Make new icon if null.
+            if (icon == null)
             {
-                icon = new VisualElement();
-                icon.name = "actorIcon";
+                icon = new VisualElement { name = "actorIcon" };
                 icon.AddToClassList("actorIcon");
                 actorField.Add(icon);
             }
-            
-            icon.style.backgroundImage = actor.actorIcon != null 
-                ? new StyleBackground(actor.actorIcon) 
+
+            icon.style.backgroundImage = actor.actorIcon != null
+                ? new StyleBackground(actor.actorIcon)
                 : StyleKeyword.Null;
         }
 

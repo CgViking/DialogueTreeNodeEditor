@@ -70,6 +70,13 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime
             _nextNodeId = _currentNode.OnProcess(_dialogueTreeAssetInstance, choice);
             // Instead of immediately moving to the next node,
             // we now wait for the user to trigger MoveToNextNode()
+            
+            // Event nodes have no UI/text — auto-advance past them so the player
+            // doesn't see an invisible "press to continue" beat.
+            if (_currentNode is Types.EventTriggerNode)
+            {
+                MoveToNextNode(0);
+            }
         }
         
         /// <summary>Call this method (e.g. via a UI button) to manually move to the next node.</summary>
