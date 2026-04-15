@@ -1,10 +1,8 @@
-using DTNE.DialogueTreeNodeEditor.Runtime.Attributes;
-
 namespace DTNE.DialogueTreeNodeEditor.Runtime
 {
-    [NodeInfo("If (Experimental)", "Conditions/If")]
+    // Stub: no [NodeInfo] until a variable/condition system exists to back it.
     public class IfConditionNode : DialogueGraphNode
     {
-        
+
     }
 }

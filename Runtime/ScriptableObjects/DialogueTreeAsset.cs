@@ -32,10 +32,12 @@ namespace DTNE.DialogueTreeNodeEditor.Runtime.ScriptableObjects
 
         public void Init(GameObject gameObject)
         {
-            this.gameObject = gameObject; //TODO: Isn't it opposite?
+            this.gameObject = gameObject;
+            // Constructor seeded the dict before Unity deserialized _nodes — rebuild from the real list.
+            _nodeDictionary = new Dictionary<string, DialogueGraphNode>();
             foreach (DialogueGraphNode node in Nodes)
             {
-                _nodeDictionary.Add(node.id, node);
+                _nodeDictionary[node.id] = node;
             }
         }
 
